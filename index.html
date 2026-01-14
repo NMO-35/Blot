@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة NMO الاحترافية</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #e2e8f0;
+            --card-bg: #ffffff;
+            --text-main: #0f172a; 
+            --input-bg: #f1f5f9;
+            --chip-bg: #f1f5f9;
+            --sun: #1e40af; 
+            --hokm: #991b1b; 
+            --current-color: #1e40af; 
+            --border: #cbd5e1;
+            --text-chip-val: #1e40af;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #020617;
+            --card-bg: #0f172a;
+            --text-main: #ffffff; /* تفتيح جميع النصوص والأرقام */
+            --input-bg: #1e293b;
+            --chip-bg: #1e293b;
+            --border: #334155;
+            --sun: #3b82f6; /* أزرق أفتح للظلام */
+            --hokm: #ef4444; /* أحمر أفتح للظلام */
+            --text-chip-val: #ffffff; /* جعل أرقام المشاريع بيضاء في الوضع الداكن */
+        }
+
+        body {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            transition: all 0.4s ease;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 400px;
+            background: var(--card-bg);
+            border-radius: 35px;
+            padding: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.2);
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            background: var(--chip-bg);
+            border: 1px solid var(--border);
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            font-size: 18px;
+        }
+
+        .header h2 { 
+            text-align: center; 
+            font-size: 22px; 
+            color: var(--current-color); 
+            margin: 0 0 25px 0; 
+            transition: color 0.4s ease;
+            font-weight: 800;
+        }
+
+        .type-switch {
+            display: flex;
+            background: var(--chip-bg);
+            padding: 6px;
+            border-radius: 18px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+
+        .type-switch button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            background: transparent;
+            color: #64748b;
+            transition: 0.3s;
+        }
+
+        button.active-sun { background: var(--sun); color: white !important; }
+        button.active-hokm { background: var(--hokm); color: white !important; }
+
+        .input-group label { display: block; font-size: 13px; margin-bottom: 8px; font-weight: 700; color: var(--text-main); }
+        
+        input[type="number"] {
+            width: 100%;
+            background: var(--input-bg);
+            border: 2px solid var(--border);
+            padding: 16px;
+            border-radius: 20px;
+            font-size: 34px;
+            text-align: center;
+            font-weight: 700;
+            color: var(--text-main); 
+            outline: none;
+            box-sizing: border-box;
+            transition: all 0.4s ease;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .proj-chip {
+            background: var(--chip-bg);
+            padding: 14px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            transition: 0.2s;
+            color: var(--text-main);
+        }
+
+        .proj-chip.selected { border-color: var(--current-color); border-width: 2px; }
+        .proj-chip input { display: none; }
+        .proj-chip span { font-size: 14px; font-weight: 600; }
+        
+        /* تفتيح أرقام المشاريع (سرا، 50، 100..) */
+        .proj-chip .val { 
+            font-weight: 800; 
+            color: var(--text-chip-val); 
+            font-size: 12px; 
+            transition: color 0.4s ease;
+        }
+
+        .result-card {
+            margin-top: 25px;
+            background: var(--current-color);
+            padding: 22px;
+            border-radius: 25px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+            transition: background 0.4s ease;
+        }
+
+        .result-card .score { font-size: 58px; font-weight: 800; display: block; line-height: 1; margin: 5px 0; }
+
+        .footer { text-align: center; margin-top: 25px; font-size: 12px; color: #64748b; }
+        .footer b { color: var(--current-color); font-weight: 800; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+    
+    <div class="header">
+        <h2 id="title-text">حاسبة بلوت صن</h2>
+    </div>
+
+    <div class="type-switch">
+        <button id="sBtn" class="active-sun" onclick="setM('sun')">صن</button>
+        <button id="hBtn" onclick="setM('hokm')">حكم</button>
+    </div>
+
+    <div class="input-group">
+        <label>نقاط الورق</label>
+        <input type="number" id="scInp" placeholder="0" oninput="calculate()">
+    </div>
+
+    <div class="projects-grid">
+        <label class="proj-chip"><input type="checkbox" onchange="up(this)"><span>سرا</span><span class="val" id="v-sera">4</span></label>
+        <label class="proj-chip"><input type="checkbox" onchange="up(this)"><span>خمسين</span><span class="val" id="v-50">10</span></label>
+        <label class="proj-chip"><input type="checkbox" onchange="up(this)"><span>مئة</span><span class="val" id="v-100">20</span></label>
+        <label class="proj-chip" id="c-400"><input type="checkbox" onchange="up(this)"><span>400</span><span class="val">40</span></label>
+        <label class="proj-chip" id="c-baloot" style="display:none;"><input type="checkbox" onchange="up(this)"><span>بلوت</span><span class="val">2</span></label>
+    </div>
+
+    <div class="result-card">
+        <span style="font-size: 12px; opacity: 0.9;">إجمالي الأبناط</span>
+        <span class="score" id="res">0</span>
+        <span style="font-weight: bold; opacity: 0.9;">بنط</span>
+    </div>
+
+    <div class="footer">
+        جميع الحقوق محفوظة لبرمجة <b>NMO</b> &copy; 2026
+    </div>
+</div>
+
+<script>
+    let mode = 'sun';
+
+    function toggleTheme() {
+        const b = document.body;
+        const btn = document.getElementById('themeBtn');
+        const isDark = b.getAttribute('data-theme') === 'dark';
+        b.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        btn.innerText = isDark ? '🌙' : '☀️';
+        setM(mode); // لتحديث الألوان فوراً
+    }
+
+    function setM(val) {
+        mode = val;
+        const root = document.documentElement;
+        document.getElementById('sBtn').className = (mode === 'sun') ? 'active-sun' : '';
+        document.getElementById('hBtn').className = (mode === 'hokm') ? 'active-hokm' : '';
+        
+        const sunColor = getComputedStyle(root).getPropertyValue('--sun').trim();
+        const hokmColor = getComputedStyle(root).getPropertyValue('--hokm').trim();
+
+        if (mode === 'sun') {
+            document.getElementById('title-text').innerText = 'حاسبة بلوت صن';
+            root.style.setProperty('--current-color', sunColor);
+        } else {
+            document.getElementById('title-text').innerText = 'حاسبة بلوت حكم';
+            root.style.setProperty('--current-color', hokmColor);
+        }
+        
+        document.getElementById('v-sera').innerText = (mode === 'sun') ? '4' : '2';
+        document.getElementById('v-50').innerText = (mode === 'sun') ? '10' : '5';
+        document.getElementById('v-100').innerText = (mode === 'sun') ? '20' : '10';
+        
+        document.getElementById('c-400').style.display = (mode === 'sun') ? 'flex' : 'none';
+        document.getElementById('c-baloot').style.display = (mode === 'hokm') ? 'flex' : 'none';
+
+        calculate();
+    }
+
+    function up(el) {
+        if(el.checked) el.parentElement.classList.add('selected');
+        else el.parentElement.classList.remove('selected');
+        calculate();
+    }
+
+    function calculate() {
+        const inp = document.getElementById('scInp');
+        let valStr = inp.value;
+        let numVal = (valStr === "" || valStr === "-") ? 0 : parseInt(valStr);
+
+        let pAbnat = 0, prjAbnat = 0;
+        if(mode === 'sun') {
+            pAbnat = Math.round(numVal / 10) * 2;
+        } else {
+            pAbnat = (numVal % 10 >= 6) ? Math.ceil(numVal / 10) : Math.floor(numVal / 10);
+        }
+
+        const checks = document.querySelectorAll('.proj-chip input');
+        if(checks[0].checked) prjAbnat += (mode === 'sun' ? 4 : 2);
+        if(checks[1].checked) prjAbnat += (mode === 'sun' ? 10 : 5);
+        if(checks[2].checked) prjAbnat += (mode === 'sun' ? 20 : 10);
+        if(mode === 'sun' && checks[3].checked) prjAbnat += 40;
+        if(mode === 'hokm' && checks[4].checked) prjAbnat += 2;
+
+        document.getElementById('res').innerText = pAbnat + prjAbnat;
+    }
+
+    setM('sun');
+</script>
+</body>
+</html>
