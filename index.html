@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة NMO الاحترافية</title>
+    <title>حاسبة NMO الاحترافية 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -16,19 +16,17 @@
             --hokm: #991b1b; 
             --current-color: #1e40af; 
             --border: #cbd5e1;
-            --text-chip-val: #1e40af;
         }
 
         [data-theme="dark"] {
             --bg-body: #020617;
             --card-bg: #0f172a;
-            --text-main: #ffffff; /* تفتيح جميع النصوص والأرقام */
+            --text-main: #ffffff;
             --input-bg: #1e293b;
             --chip-bg: #1e293b;
             --border: #334155;
-            --sun: #3b82f6; /* أزرق أفتح للظلام */
-            --hokm: #ef4444; /* أحمر أفتح للظلام */
-            --text-chip-val: #ffffff; /* جعل أرقام المشاريع بيضاء في الوضع الداكن */
+            --sun: #3b82f6;
+            --hokm: #ef4444;
         }
 
         body {
@@ -41,6 +39,8 @@
             align-items: center;
             margin: 0;
             transition: all 0.4s ease;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .container {
@@ -48,137 +48,80 @@
             max-width: 400px;
             background: var(--card-bg);
             border-radius: 35px;
-            padding: 30px;
+            padding: 25px;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.2);
             border: 1px solid var(--border);
             position: relative;
         }
 
         .theme-toggle {
-            position: absolute;
-            top: 25px;
-            left: 25px;
-            background: var(--chip-bg);
-            border: 1px solid var(--border);
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-main);
-            font-size: 18px;
+            position: absolute; top: 20px; left: 20px;
+            background: var(--chip-bg); border: 1px solid var(--border);
+            width: 40px; height: 40px; border-radius: 12px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            color: var(--text-main); font-size: 18px; transition: 0.3s;
         }
 
-        .header h2 { 
-            text-align: center; 
-            font-size: 22px; 
-            color: var(--current-color); 
-            margin: 0 0 25px 0; 
-            transition: color 0.4s ease;
-            font-weight: 800;
-        }
+        .header h2 { text-align: center; font-size: 20px; color: var(--current-color); margin: 0 0 20px 0; font-weight: 800; transition: color 0.3s; }
 
-        .type-switch {
-            display: flex;
-            background: var(--chip-bg);
-            padding: 6px;
-            border-radius: 18px;
-            margin-bottom: 25px;
-            border: 1px solid var(--border);
-        }
-
-        .type-switch button {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            background: transparent;
-            color: #64748b;
-            transition: 0.3s;
-        }
-
+        .type-switch { display: flex; background: var(--chip-bg); padding: 5px; border-radius: 18px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .type-switch button { flex: 1; padding: 10px; border: none; border-radius: 14px; font-weight: 700; cursor: pointer; background: transparent; color: #64748b; transition: 0.3s; }
         button.active-sun { background: var(--sun); color: white !important; }
         button.active-hokm { background: var(--hokm); color: white !important; }
 
-        .input-group label { display: block; font-size: 13px; margin-bottom: 8px; font-weight: 700; color: var(--text-main); }
-        
+        .input-group label { display: block; font-size: 13px; margin-bottom: 8px; font-weight: 700; opacity: 0.8; }
         input[type="number"] {
-            width: 100%;
-            background: var(--input-bg);
-            border: 2px solid var(--border);
-            padding: 16px;
-            border-radius: 20px;
-            font-size: 34px;
-            text-align: center;
-            font-weight: 700;
-            color: var(--text-main); 
-            outline: none;
-            box-sizing: border-box;
-            transition: all 0.4s ease;
+            width: 100%; background: var(--input-bg); border: 2px solid var(--border);
+            padding: 12px; border-radius: 18px; font-size: 30px; text-align: center;
+            font-weight: 700; color: var(--text-main); outline: none; transition: 0.3s;
         }
 
-        .projects-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 15px;
-        }
+        .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
 
-        .proj-chip {
-            background: var(--chip-bg);
-            padding: 14px;
-            border-radius: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            border: 1px solid var(--border);
-            transition: 0.2s;
-            color: var(--text-main);
+        .proj-card {
+            background: var(--chip-bg); padding: 12px; border-radius: 18px;
+            border: 1px solid var(--border); transition: 0.2s;
+            display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative;
         }
-
-        .proj-chip.selected { border-color: var(--current-color); border-width: 2px; }
-        .proj-chip input { display: none; }
-        .proj-chip span { font-size: 14px; font-weight: 600; }
+        .proj-card.active { border-color: var(--current-color); border-width: 2px; background: var(--card-bg); }
+        .proj-card .name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+        .proj-card .pts-label { font-size: 11px; color: var(--current-color); font-weight: 800; }
         
-        /* تفتيح أرقام المشاريع (سرا، 50، 100..) */
-        .proj-chip .val { 
-            font-weight: 800; 
-            color: var(--text-chip-val); 
-            font-size: 12px; 
-            transition: color 0.4s ease;
+        .count-badge {
+            position: absolute; top: -5px; right: -5px;
+            background: var(--current-color); color: white;
+            width: 22px; height: 22px; border-radius: 50%;
+            font-size: 12px; display: none; align-items: center; justify-content: center; font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
+        .proj-card.active .count-badge { display: flex; }
+
+        .action-buttons { display: flex; gap: 10px; margin-top: 15px; }
+
+        .btn-utility {
+            flex: 1; padding: 10px; border-radius: 12px; border: 1px solid var(--border);
+            background: var(--chip-bg); color: var(--text-main); font-size: 12px;
+            cursor: pointer; font-weight: 600; transition: 0.2s;
+        }
+        .btn-utility:active { transform: scale(0.95); }
+        .btn-utility:disabled { opacity: 0.2; cursor: not-allowed; }
 
         .result-card {
-            margin-top: 25px;
-            background: var(--current-color);
-            padding: 22px;
-            border-radius: 25px;
-            color: white;
-            text-align: center;
-            box-shadow: 0 12px 24px rgba(0,0,0,0.2);
-            transition: background 0.4s ease;
+            margin-top: 20px; background: var(--current-color);
+            padding: 15px; border-radius: 25px; color: white; text-align: center;
+            transition: 0.4s; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
+        .result-card .score { font-size: 50px; font-weight: 800; display: block; line-height: 1; margin: 5px 0; }
 
-        .result-card .score { font-size: 58px; font-weight: 800; display: block; line-height: 1; margin: 5px 0; }
-
-        .footer { text-align: center; margin-top: 25px; font-size: 12px; color: #64748b; }
-        .footer b { color: var(--current-color); font-weight: 800; }
+        .footer { text-align: center; margin-top: 20px; font-size: 11px; color: #64748b; }
+        .footer b { color: var(--current-color); transition: color 0.3s; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
-    
-    <div class="header">
-        <h2 id="title-text">حاسبة بلوت صن</h2>
-    </div>
+    <div class="header"><h2 id="title-text">حاسبة بلوت صن</h2></div>
 
     <div class="type-switch">
         <button id="sBtn" class="active-sun" onclick="setM('sun')">صن</button>
@@ -187,49 +130,112 @@
 
     <div class="input-group">
         <label>نقاط الورق</label>
-        <input type="number" id="scInp" placeholder="0" oninput="calculate()">
+        <input type="number" id="scInp" placeholder="0" oninput="saveState(); calculate()">
     </div>
 
-    <div class="projects-grid">
-        <label class="proj-chip"><input type="checkbox" onchange="up(this)"><span>سرا</span><span class="val" id="v-sera">4</span></label>
-        <label class="proj-chip"><input type="checkbox" onchange="up(this)"><span>خمسين</span><span class="val" id="v-50">10</span></label>
-        <label class="proj-chip"><input type="checkbox" onchange="up(this)"><span>مئة</span><span class="val" id="v-100">20</span></label>
-        <label class="proj-chip" id="c-400"><input type="checkbox" onchange="up(this)"><span>400</span><span class="val">40</span></label>
-        <label class="proj-chip" id="c-baloot" style="display:none;"><input type="checkbox" onchange="up(this)"><span>بلوت</span><span class="val">2</span></label>
+    <div class="projects-grid" id="grid"></div>
+
+    <div class="action-buttons">
+        <button class="btn-utility" id="undoBtn" onclick="undo()" disabled>↩ تراجع</button>
+        <button class="btn-utility" onclick="resetAll()">🔄 تصفير الكل</button>
     </div>
 
     <div class="result-card">
-        <span style="font-size: 12px; opacity: 0.9;">إجمالي الأبناط</span>
+        <span style="font-size: 11px; opacity: 0.9;">إجمالي الأبناط</span>
         <span class="score" id="res">0</span>
         <span style="font-weight: bold; opacity: 0.9;">بنط</span>
     </div>
 
-    <div class="footer">
-        جميع الحقوق محفوظة لبرمجة <b>NMO</b> &copy; 2026
-    </div>
+    <div class="footer">جميع الحقوق محفوظة لبرمجة <b>NMO</b> &copy; 2026</div>
 </div>
 
 <script>
     let mode = 'sun';
+    let history = [];
+    let projects = {
+        sera: { name: 'سرا', count: 0, sun: 4, hokm: 2, limit: 4 },
+        fifty: { name: 'خمسين', count: 0, sun: 10, hokm: 5, limit: 2 },
+        hundred: { name: 'مئة', count: 0, sun: 20, hokm: 10, limit: 2 },
+        fourHundred: { name: '400', count: 0, sun: 40, hokm: 0, limit: 1 },
+        baloot: { name: 'بلوت', count: 0, sun: 0, hokm: 2, limit: 1 }
+    };
 
-    function toggleTheme() {
-        const b = document.body;
-        const btn = document.getElementById('themeBtn');
-        const isDark = b.getAttribute('data-theme') === 'dark';
-        b.setAttribute('data-theme', isDark ? 'light' : 'dark');
-        btn.innerText = isDark ? '🌙' : '☀️';
-        setM(mode); // لتحديث الألوان فوراً
+    function saveState() {
+        const state = {
+            mode: mode,
+            projects: JSON.parse(JSON.stringify(projects)),
+            inputValue: document.getElementById('scInp').value
+        };
+        if (history.length > 0) {
+            const last = history[history.length - 1];
+            if (JSON.stringify(last) === JSON.stringify(state)) return;
+        }
+        history.push(state);
+        if (history.length > 20) history.shift();
+        updateUndoButton();
     }
 
-    function setM(val) {
-        mode = val;
+    function undo() {
+        if (history.length > 1) {
+            history.pop(); 
+            const prevState = history[history.length - 1];
+            mode = prevState.mode;
+            projects = JSON.parse(JSON.stringify(prevState.projects));
+            document.getElementById('scInp').value = prevState.inputValue;
+            applyModeStyles();
+            renderProjects();
+            calculate(false);
+            updateUndoButton();
+        }
+    }
+
+    function updateUndoButton() {
+        document.getElementById('undoBtn').disabled = history.length <= 1;
+    }
+
+    function renderProjects() {
+        const grid = document.getElementById('grid');
+        grid.innerHTML = '';
+        for (let key in projects) {
+            const p = projects[key];
+            if (mode === 'sun' && key === 'baloot') continue;
+            if (mode === 'hokm' && key === 'fourHundred') continue;
+
+            const card = document.createElement('div');
+            card.className = `proj-card ${p.count > 0 ? 'active' : ''}`;
+            card.onclick = () => { saveState(); addProject(key); };
+            
+            card.innerHTML = `
+                <div class="count-badge">${p.count}</div>
+                <span class="name">${p.name}</span>
+                <span class="pts-label">${mode === 'sun' ? p.sun : p.hokm} بنط</span>
+            `;
+            grid.appendChild(card);
+        }
+    }
+
+    function addProject(key) {
+        if (projects[key].count < projects[key].limit) {
+            projects[key].count++;
+            renderProjects();
+            calculate();
+        }
+    }
+
+    function resetAll() {
+        saveState();
+        document.getElementById('scInp').value = '';
+        for (let key in projects) projects[key].count = 0;
+        renderProjects();
+        calculate();
+    }
+
+    function applyModeStyles() {
         const root = document.documentElement;
         document.getElementById('sBtn').className = (mode === 'sun') ? 'active-sun' : '';
         document.getElementById('hBtn').className = (mode === 'hokm') ? 'active-hokm' : '';
-        
         const sunColor = getComputedStyle(root).getPropertyValue('--sun').trim();
         const hokmColor = getComputedStyle(root).getPropertyValue('--hokm').trim();
-
         if (mode === 'sun') {
             document.getElementById('title-text').innerText = 'حاسبة بلوت صن';
             root.style.setProperty('--current-color', sunColor);
@@ -237,46 +243,51 @@
             document.getElementById('title-text').innerText = 'حاسبة بلوت حكم';
             root.style.setProperty('--current-color', hokmColor);
         }
-        
-        document.getElementById('v-sera').innerText = (mode === 'sun') ? '4' : '2';
-        document.getElementById('v-50').innerText = (mode === 'sun') ? '10' : '5';
-        document.getElementById('v-100').innerText = (mode === 'sun') ? '20' : '10';
-        
-        document.getElementById('c-400').style.display = (mode === 'sun') ? 'flex' : 'none';
-        document.getElementById('c-baloot').style.display = (mode === 'hokm') ? 'flex' : 'none';
-
-        calculate();
     }
 
-    function up(el) {
-        if(el.checked) el.parentElement.classList.add('selected');
-        else el.parentElement.classList.remove('selected');
-        calculate();
+    function setM(val) {
+        if (mode !== val) {
+            saveState();
+            mode = val;
+            applyModeStyles();
+            renderProjects();
+            calculate();
+        }
     }
 
-    function calculate() {
+    function calculate(shouldSave = true) {
         const inp = document.getElementById('scInp');
         let valStr = inp.value;
+        // ميزة مرونة المسح: نعتبر الفراغ 0 برمجياً ولا نفرضه في الحقل
         let numVal = (valStr === "" || valStr === "-") ? 0 : parseInt(valStr);
 
-        let pAbnat = 0, prjAbnat = 0;
+        let pAbnat = 0;
         if(mode === 'sun') {
             pAbnat = Math.round(numVal / 10) * 2;
         } else {
             pAbnat = (numVal % 10 >= 6) ? Math.ceil(numVal / 10) : Math.floor(numVal / 10);
         }
 
-        const checks = document.querySelectorAll('.proj-chip input');
-        if(checks[0].checked) prjAbnat += (mode === 'sun' ? 4 : 2);
-        if(checks[1].checked) prjAbnat += (mode === 'sun' ? 10 : 5);
-        if(checks[2].checked) prjAbnat += (mode === 'sun' ? 20 : 10);
-        if(mode === 'sun' && checks[3].checked) prjAbnat += 40;
-        if(mode === 'hokm' && checks[4].checked) prjAbnat += 2;
-
-        document.getElementById('res').innerText = pAbnat + prjAbnat;
+        let prjTotal = 0;
+        for (let key in projects) {
+            const p = projects[key];
+            prjTotal += p.count * (mode === 'sun' ? p.sun : p.hokm);
+        }
+        document.getElementById('res').innerText = pAbnat + prjTotal;
     }
 
-    setM('sun');
+    function toggleTheme() {
+        const b = document.body;
+        const btn = document.getElementById('themeBtn');
+        const isDark = b.getAttribute('data-theme') === 'dark';
+        b.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        btn.innerText = isDark ? '🌙' : '☀️';
+        applyModeStyles();
+    }
+
+    applyModeStyles();
+    renderProjects();
+    saveState();
 </script>
 </body>
 </html>
